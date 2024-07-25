@@ -32,13 +32,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.wear.compose.foundation.lazy.ScalingLazyColumn
+import androidx.wear.compose.foundation.lazy.ScalingLazyColumnDefaults
 import androidx.wear.compose.material.Scaffold
 import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
 import com.example.android.wearable.composeforwearos.theme.WearAppTheme
 import com.google.android.horologist.annotations.ExperimentalHorologistApi
 import com.google.android.horologist.compose.layout.AppScaffold
 import com.google.android.horologist.compose.layout.ScalingLazyColumn
+import com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.ItemType
 import com.google.android.horologist.compose.layout.ScreenScaffold
+import com.google.android.horologist.compose.layout.rememberResponsiveColumnState
 
 /**
  * This code lab is meant to help existing Compose developers get up to speed quickly on
@@ -71,46 +74,48 @@ fun WearApp() {
     WearAppTheme {
         /* *************************** Part 4: Wear OS Scaffold *************************** */
         // TODO (Start): Create a AppScaffold (Wear Version)
+        AppScaffold{
 
         // TODO: Swap to ScalingLazyColumnState
-        val listState = rememberLazyListState()
+        val listState = rememberResponsiveColumnState(
+            contentPadding = com.google.android.horologist.compose.layout.ScalingLazyColumnDefaults.padding(
+                first = ItemType.SingleButton,
+                last = ItemType.Chip,
+            ),
+        )
 
         /* *************************** Part 4: Wear OS Scaffold *************************** */
         // TODO (Start): Create a ScreenScaffold (Wear Version)
+            ScreenScaffold(
+                scrollState = listState,
+            ) {
 
-        // Modifiers used by our Wear composables.
-        val contentModifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
-        val iconModifier = Modifier.size(24.dp).wrapContentSize(align = Alignment.Center)
+                // Modifiers used by our Wear composables.
+                val contentModifier = Modifier.fillMaxWidth().padding(bottom = 8.dp)
+                val iconModifier = Modifier.size(24.dp).wrapContentSize(align = Alignment.Center)
 
-        /* *************************** Part 3: ScalingLazyColumn *************************** */
-        // TODO: Swap a ScalingLazyColumn (Wear's version of LazyColumn)
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(
-                top = 32.dp,
-                start = 8.dp,
-                end = 8.dp,
-                bottom = 32.dp,
-            ),
-            verticalArrangement = Arrangement.Center,
-            state = listState,
-        ) {
-            // TODO: Remove item; for beginning only.
-            item { StartOnlyTextComposables() }
+                /* *************************** Part 3: ScalingLazyColumn *************************** */
+                // TODO: Swap a ScalingLazyColumn (Wear's version of LazyColumn)
+                com.google.android.horologist.compose.layout.ScalingLazyColumn(
+                    columnState = listState,
+                    modifier = Modifier.fillMaxSize(),
+                ) {
 
-            /* ******************* Part 1: Simple composables ******************* */
-            item { ButtonExample(contentModifier, iconModifier) }
-            item { TextExample(contentModifier) }
-            item { CardExample(contentModifier, iconModifier) }
+                    /* ******************* Part 1: Simple composables ******************* */
+                    item { ButtonExample(contentModifier, iconModifier) }
+                    item { TextExample(contentModifier) }
+                    item { CardExample(contentModifier, iconModifier) }
 
-            /* ********************* Part 2: Wear unique composables ********************* */
-            item { ChipExample(contentModifier, iconModifier) }
-            item { ToggleChipExample(contentModifier) }
-        }
+                    /* ********************* Part 2: Wear unique composables ********************* */
+                    item { ChipExample(contentModifier, iconModifier) }
+                    item { ToggleChipExample(contentModifier) }
+                }
 
-        // TODO (End): Create a ScreenScaffold (Wear Version)
+                // TODO (End): Create a ScreenScaffold (Wear Version)
+            }
     }
     // TODO (End): Create a AppScaffold (Wear Version)
+        }
 }
 
 @WearPreviewDevices
